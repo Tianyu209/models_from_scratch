@@ -13,7 +13,7 @@ class NaiveBayes():
         self.priors = None
         self.likelihoods = None
 
-    def fit(self,alpha = 1e-9):
+    def fit(self,alpha = 1e-10):
         self.priors = self.prior()
         self.likelihoods = self.likelihood(alpha)
     
@@ -43,7 +43,7 @@ class NaiveBayes():
                     likelihoods[i][j][val] = p
         
         return likelihoods
-    def predict(self,X):
+    def predict(self,X, alpha = 1e-9):
         #P(Y|X) = P(Y)P(X|Y)/P(X)
         X = np.array(X)
         #avoid underflow
@@ -53,17 +53,31 @@ class NaiveBayes():
             for j in range(self.num_features):
                 feature_val = X[i, j]
                 for c in range(self.num_classes):
-                    log_posteriors[i, c] += np.log(self.likelihoods[j][c].get(feature_val, 1e-9))
+                    log_posteriors[i, c] += np.log(self.likelihoods[j][c].get(feature_val, alpha))
         return self.classes[np.argmax(log_posteriors, axis=1)] 
     def accuracy(self,X,y):
         y_pred =  self.predict(X) #decision threshold = 0.5
         return np.mean(y_pred == y)
+    def confusion_matrix(self,X,y):
+        y_pred = self.predict(X)
+        cm = np.zeros((2,2))
+        for i in range(len(y)):
+            cm[y[i],y_pred[i]] += 1
+        return cm
+    
 if __name__ == "__main__":
-    X_train = pd.read_csv("X_train.csv").to_numpy()
-    y_train = pd.read_csv("y_train.csv").to_numpy()
-    X_test = pd.read_csv("X_test.csv").to_numpy()
-    y_test = pd.read_csv("y_test.csv").to_numpy()
+    X_train = pd.read_csv("ML\data\NB\X_train.csv").to_numpy()
+    y_train = pd.read_csv("ML\data\NB\y_train.csv").to_numpy().ravel()
+    X_test = pd.read_csv("ML\data\NB\X_test.csv").to_numpy()
+    y_test = pd.read_csv("ML\data\NB\y_test.csv").to_numpy().ravel()
     nb = NaiveBayes(X_train,y_train)
     nb.fit()
-    print(y_test)
+    print(nb.predict(X_test))
     print(nb.accuracy(X_test,y_test))
+
+    from sklearn.naive_bayes import CategoricalNB
+    classifier = CategoricalNB(alpha=1.0e-10)
+    classifier.fit(X_train, y_train)
+    y_pred = classifier.predict(X_test)
+    
+    print(len(y_pred),sum(y_pred == nb.predict(X_test)))
