@@ -66,10 +66,10 @@ class NaiveBayes():
         return cm
     
 if __name__ == "__main__":
-    X_train = pd.read_csv("ML\data\NB\X_train.csv").to_numpy()
-    y_train = pd.read_csv("ML\data\NB\y_train.csv").to_numpy().ravel()
-    X_test = pd.read_csv("ML\data\NB\X_test.csv").to_numpy()
-    y_test = pd.read_csv("ML\data\NB\y_test.csv").to_numpy().ravel()
+    X_train = pd.read_csv("data\X_train.csv").to_numpy()
+    y_train = pd.read_csv("data\y_train.csv").to_numpy().ravel()
+    X_test = pd.read_csv("data\X_test.csv").to_numpy()
+    y_test = pd.read_csv("data\y_test.csv").to_numpy().ravel()
     nb = NaiveBayes(X_train,y_train)
     nb.fit()
     print(nb.predict(X_test))

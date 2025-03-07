@@ -52,8 +52,8 @@ def data_clean(X):
 if __name__ == '__main__':
     # Load data
     
-    y = pd.read_csv(r"data\KNN\y_pred.csv",header=None).squeeze()
-    X = pd.read_csv(r"data\KNN\adult.csv")
+    y = pd.read_csv(r"data\y_pred.csv",header=None).squeeze()
+    X = pd.read_csv(r"data\adult.csv")
     X = data_clean(X)[X.columns[:-1]]
     X_train, X_test, y_train, y_test = train_test_split(X, X[X.columns[-1]], test_size=0.2, random_state=3)#hold-out, fixed random seed for scoring
     
