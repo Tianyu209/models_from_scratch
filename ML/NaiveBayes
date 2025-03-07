@@ -56,7 +56,7 @@ class NaiveBayes():
                     log_posteriors[i, c] += np.log(self.likelihoods[j][c].get(feature_val, alpha))
         return self.classes[np.argmax(log_posteriors, axis=1)] 
     def accuracy(self,X,y):
-        y_pred =  self.predict(X) #decision threshold = 0.5
+        y_pred =  self.predict(X) #max(P(Y_i|X))
         return np.mean(y_pred == y)
     def confusion_matrix(self,X,y):
         y_pred = self.predict(X)

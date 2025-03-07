@@ -35,7 +35,7 @@ class KNN():
             raise ValueError("Invalid distance metric")
 
     def accuracy(self,X,y):
-        y_pred =  self.predict(X) #decision threshold = 0.5
+        y_pred =  self.predict(X) 
         return np.mean(y_pred == y)
 def catagorical_to_numeric(X):
     #cata to onehot
@@ -45,7 +45,7 @@ def catagorical_to_numeric(X):
             X[col] = le.fit_transform(X[col])
     return X
 def data_clean(X):
-    #assign missing value to mean just for simplicity
+    #assign missing value to mode just for simplicity
     X = X.fillna(X.mode().iloc[0]) 
     X = catagorical_to_numeric(X)
     return X
